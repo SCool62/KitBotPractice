@@ -19,6 +19,14 @@ public class BeamBreakIOReal implements BeamBreakIO {
         inputs.secondBeamBreak = secondBeamBreak.get();
     }
 
+    @Override
+    public boolean getSecondBeamBreak() {
+        // TODO Auto-generated method stub
+        return secondBeamBreak.get();
+    }
+
+    
+
     
 
 }

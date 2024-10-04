@@ -23,5 +23,13 @@ public class BeamBreakIOSim implements BeamBreakIO {
     public void setSecondBeamBreakState(boolean state) {
         secondBeamBreak = state;
     }
+
+    @Override
+    public boolean getSecondBeamBreak() {
+        // TODO Auto-generated method stub
+        return secondBeamBreak;
+    }
+
+    
     
 }

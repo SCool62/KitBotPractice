@@ -13,12 +13,15 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Subsystems.feeder.RoutingSim;
 
 /** Add your docs here. */
 public class ShooterSubsystem extends SubsystemBase {
     // Copied from repo
     public static final double FLYWHEEL_RATIO = 18.0 / 24.0;
     public static final double PIVOT_RATIO = (27.0 / 1.0) * (48.0 / 22.0);
+
+    private static final double NOTE_POS_FLYWHEEL_LOWER_LIMIT = 0.204;
 
     // IO Interfaces
     private final FlywheelIO flywheelIOLeft;
@@ -51,6 +54,10 @@ public class ShooterSubsystem extends SubsystemBase {
         flywheelIOLeft.updateInputs(flywheelIOInputsLeft);
         flywheelIORight.updateInputs(flywheelIOInputsRight);
         pivotIO.updateInputs(pivotIOInputs);
+
+        if ((!RoutingSim.getInstance().getNotePos().isEmpty() && RoutingSim.getInstance().getNotePos().get() >= NOTE_POS_FLYWHEEL_LOWER_LIMIT)) {
+            RoutingSim.getInstance().updateSim(0.02, flywheelIOInputsLeft.motorVelocityRotationsPerSecond);
+        }
 
         Logger.processInputs("Flywheel1", flywheelIOInputsLeft);
         Logger.processInputs("Flywheel2", flywheelIOInputsRight);

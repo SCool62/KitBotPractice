@@ -7,6 +7,7 @@ package frc.robot.Subsystems.feeder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 /** Add your docs here. */
@@ -37,7 +38,11 @@ public class FeederIOSim implements FeederIO {
     @Override
     public void updateInputs(FeederIOInputs inputs) {
         feederMotorSim.update(0.02);
-        RoutingSim.getInstance().updateSim(0.02, feederMotorSim.getAngularVelocityRPM() / 60);
+
+        if (RoutingSim.getInstance().getNotePos().isEmpty() || RoutingSim.getInstance().getNotePos().get() < (0.051 + Units.inchesToMeters(14))
+        ) {
+            RoutingSim.getInstance().updateSim(0.02, feederMotorSim.getAngularVelocityRPM() / 60);
+        }
         
         inputs.feederAmps = feederMotorSim.getCurrentDrawAmps();
         inputs.feederVelocityRotationsPerSec = feederMotorSim.getAngularVelocityRPM() / 60;

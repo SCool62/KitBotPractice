@@ -60,13 +60,9 @@ public class RobotContainer {
   private void configureBindings() {
     controller.x().whileTrue(Commands.deadline(
       // Hopefully runs flywheels for 1 sec, then turns them off
-      feederSubsystem.setVelocityCommand(80).withTimeout(1),
+      feederSubsystem.setVelocityCommand(80).until(() -> feederSubsystem.getBeamBreakIO().getSecondBeamBreak()).andThen(Commands.waitSeconds(1)),
       // Tune values
-      shooterSubsystem.runShooterCommand(new Rotation2d(30.0), () -> -80, () -> -80),
-      // Reset sim position
-      Commands.runOnce(() -> {
-        RoutingSim.getInstance().setNotePos(Optional.empty());
-      })
+      shooterSubsystem.runShooterCommand(new Rotation2d(30.0), () -> 80, () -> 80)
     ));
     controller.b().whileTrue(shooterSubsystem.setPivotAngleCommand(new Rotation2d(50)));
     controller.y().whileTrue(feederSubsystem.indexCommand());

@@ -29,28 +29,35 @@ public class RoutingSim {
     private RoutingSim() {}
 
 
-    public void updateSim(double dtSeconds, double feederVelocityRotationPerSec) {
+    public void updateSim(double dtSeconds, double velocityRotationPerSec) {
         
         if (notePos.isEmpty()) {
             Logger.recordOutput("SimNotePos", -1.0);
+            beamBreakIO.get().setFirstBeamBreakState(false);
+            beamBreakIO.get().setSecondBeamBreakState(false);
+            return;
+        }
+
+        if (notePos.get() > (0.454 + Units.inchesToMeters(14))) {
+            notePos = Optional.empty();
             return;
         }
         
         // 1.562 is the diameter of the roller
-        double feederVelocityMetersPerSec = Units.inchesToMeters(feederVelocityRotationPerSec * (1.562 * Math.PI));
+        double velocityMetersPerSec = Units.inchesToMeters(velocityRotationPerSec * (Units.inchesToMeters(1.562) * Math.PI));
 
-        notePos = Optional.of(notePos.get() + (feederVelocityMetersPerSec * dtSeconds));
+        notePos = Optional.of(notePos.get() + (velocityMetersPerSec * dtSeconds));
 
         Logger.recordOutput("SimNotePos", notePos.get());
 
-        if (notePos.get() < LOWER_LIMIT_BEAMBREAK_ONE || notePos.get() > UPPER_LIMIT_BEAMBREAK_ONE || notePos.isEmpty()) {
+        if (notePos.get() < LOWER_LIMIT_BEAMBREAK_ONE || notePos.get() > UPPER_LIMIT_BEAMBREAK_ONE) {
             beamBreakIO.get().setFirstBeamBreakState(false);
         } else {
             beamBreakIO.get().setFirstBeamBreakState(true);
         }
 
 
-        if (notePos.get() < LOWER_LIMIT_BEAMBREAK_TWO || notePos.get() > UPPER_LIMIT_BEAMBREAK_TWO || notePos.isEmpty()) {
+        if (notePos.get() < LOWER_LIMIT_BEAMBREAK_TWO || notePos.get() > UPPER_LIMIT_BEAMBREAK_TWO) {
             beamBreakIO.get().setSecondBeamBreakState(false);
         } else {
             beamBreakIO.get().setSecondBeamBreakState(true);
