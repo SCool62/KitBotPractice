@@ -91,4 +91,8 @@ public class FeederSubsystem extends SubsystemBase {
         return this.feederIOInputs;
     }
 
+    public double getFeederMotorCurrentAmps() {
+        return feederIOInputs.feederAmps;
+    }
+
 }

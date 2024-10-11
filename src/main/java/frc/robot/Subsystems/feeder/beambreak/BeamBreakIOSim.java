@@ -30,6 +30,9 @@ public class BeamBreakIOSim implements BeamBreakIO {
         return secondBeamBreak;
     }
 
-    
+    @Override
+    public boolean getFirstBeamBreak() {
+        return firstBeamBreak;
+    }    
     
 }

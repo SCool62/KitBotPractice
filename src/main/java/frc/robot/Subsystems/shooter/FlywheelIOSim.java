@@ -4,10 +4,12 @@
 
 package frc.robot.Subsystems.shooter;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import frc.robot.RobotContainer;
 
 /** Add your docs here. */
 public class FlywheelIOSim implements FlywheelIO {
@@ -18,17 +20,22 @@ public class FlywheelIOSim implements FlywheelIO {
     private final PIDController flywheelController = new PIDController(0.3, 0.0, 0.0);
     private final SimpleMotorFeedforward motorFF = new SimpleMotorFeedforward(0.0, 0.0925);
 
+    private double currVoltage;
+
 
     @Override
     public void setVelocityRotationsPerSecond(double velocityTargetRotationsPerSecond) {
-        flywheelSim.setInputVoltage(flywheelController.calculate(
+        double voltage = flywheelController.calculate(
             flywheelSim.getAngularVelocityRPM() / 60, velocityTargetRotationsPerSecond)
-            + motorFF.calculate(velocityTargetRotationsPerSecond));
+            + motorFF.calculate(velocityTargetRotationsPerSecond);
+        currVoltage = voltage;
+        this.setVoltage(voltage);
     }
 
     @Override
     public void setVoltage(double voltage) {
-        flywheelSim.setInputVoltage(voltage);
+        currVoltage = voltage;
+        flywheelSim.setInputVoltage(MathUtil.clamp(voltage, -(RobotContainer.getBatteryVoltage()), RobotContainer.getBatteryVoltage()));
     }
 
     @Override
@@ -38,7 +45,7 @@ public class FlywheelIOSim implements FlywheelIO {
         inputs.motorVelocityRotationsPerSecond = flywheelSim.getAngularVelocityRPM() / 60;
         inputs.motorAmps = flywheelSim.getCurrentDrawAmps();
         inputs.motorTempC = 0;
-        inputs.motorVoltage = 0;
+        inputs.motorVoltage = currVoltage;
     }
     
 }

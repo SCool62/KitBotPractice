@@ -17,5 +17,6 @@ public interface BeamBreakIO {
 
     public abstract void updateInputs(BeamBreakIOInputs inputs);
     public abstract boolean getSecondBeamBreak(); 
+    public abstract boolean getFirstBeamBreak();
 
 }

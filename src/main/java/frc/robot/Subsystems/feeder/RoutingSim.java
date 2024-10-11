@@ -38,7 +38,7 @@ public class RoutingSim {
             return;
         }
 
-        if (notePos.get() > (0.454 + Units.inchesToMeters(14))) {
+        if (notePos.get() > (0.450 + Units.inchesToMeters(14))) {
             notePos = Optional.empty();
             return;
         }

@@ -4,14 +4,14 @@
 
 package frc.robot.Subsystems.feeder.beambreak;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
+import frc.robot.util.InvertedDigitalInput;
 
 /** Add your docs here. */
 public class BeamBreakIOReal implements BeamBreakIO {
 
-    final DigitalInput firstBeamBreak = new DigitalInput(Constants.FIRST_BEAMBREAK_CH);
-    final DigitalInput secondBeamBreak = new DigitalInput(Constants.SECOND_BEAMBREAK_CH);
+    final InvertedDigitalInput firstBeamBreak = new InvertedDigitalInput(Constants.FIRST_BEAMBREAK_CH);
+    final InvertedDigitalInput secondBeamBreak = new InvertedDigitalInput(Constants.SECOND_BEAMBREAK_CH);
 
     @Override
     public void updateInputs(BeamBreakIOInputs inputs) {
@@ -23,6 +23,11 @@ public class BeamBreakIOReal implements BeamBreakIO {
     public boolean getSecondBeamBreak() {
         // TODO Auto-generated method stub
         return secondBeamBreak.get();
+    }
+
+    @Override
+    public boolean getFirstBeamBreak() {
+        return firstBeamBreak.get();
     }
 
     

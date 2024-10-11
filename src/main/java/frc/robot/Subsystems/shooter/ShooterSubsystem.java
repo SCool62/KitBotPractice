@@ -110,4 +110,16 @@ public class ShooterSubsystem extends SubsystemBase {
         });
     }
 
+    public double getFlywheelLeftCurrentAmps() {
+        return flywheelIOInputsLeft.motorAmps;
+    }
+
+    public double getFlywheelRightCurrentAmps() {
+        return flywheelIOInputsRight.motorAmps;
+    }
+
+    public double getPivotMotorCurrentAmps() {
+        return pivotIOInputs.pivotMotorAmps;
+    }
+
 }

@@ -13,6 +13,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import frc.robot.RobotContainer;
 
 /** Add your docs here. */
 public class PivotIOSim implements PivotIO {
@@ -31,6 +32,8 @@ public class PivotIOSim implements PivotIO {
      ProfiledPIDController pidController = new ProfiledPIDController(1.0, 0.0, 1.0, new Constraints(10.0, 10.0));
     ArmFeedforward pivotFF = new ArmFeedforward(0.0, 0.12, 0.8);
 
+    private double currVoltage;
+
     @Override
     public void setPivotSetpoint(Rotation2d setpoint) {
         setVoltage(
@@ -41,7 +44,8 @@ public class PivotIOSim implements PivotIO {
 
     @Override
     public void setVoltage(double voltage) {
-        pivotSim.setInputVoltage(MathUtil.clamp(voltage, -12, 12));   
+        currVoltage = voltage;
+        pivotSim.setInputVoltage(MathUtil.clamp(voltage, -(RobotContainer.getBatteryVoltage()), RobotContainer.getBatteryVoltage()));   
     }
 
     @Override
@@ -50,7 +54,7 @@ public class PivotIOSim implements PivotIO {
 
         inputs.pivotAngle = Rotation2d.fromRadians(pivotSim.getAngleRads());
         inputs.pivotMotorAmps = pivotSim.getCurrentDrawAmps();
-        inputs.pivotMotorVoltage = 0;
+        inputs.pivotMotorVoltage = currVoltage;
         inputs.pivotMotorTempC = 0;
         
     }

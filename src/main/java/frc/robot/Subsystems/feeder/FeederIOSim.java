@@ -4,11 +4,13 @@
 
 package frc.robot.Subsystems.feeder;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import frc.robot.RobotContainer;
 
 /** Add your docs here. */
 public class FeederIOSim implements FeederIO {
@@ -19,19 +21,23 @@ public class FeederIOSim implements FeederIO {
     // kV = krakenKV (0.12) * gear ratio
     private final SimpleMotorFeedforward feederFF = new SimpleMotorFeedforward(0.0, (0.12) * 12 / 22);
 
+    private double currVoltage = 0.0;
+
     public FeederIOSim() {}
 
 
 
     @Override
     public void setVelocity(double velocityTarget) {
-        feederMotorSim.setInputVoltage(feederPid.calculate(
+        setVoltage(feederPid.calculate(
             feederMotorSim.getAngularVelocityRPM() / 60, velocityTarget)
             + feederFF.calculate(velocityTarget));
     }
 
     @Override
     public void setVoltage(double voltage) {
+        voltage = MathUtil.clamp(voltage, -(RobotContainer.getBatteryVoltage()), RobotContainer.getBatteryVoltage());
+        currVoltage = voltage;
         feederMotorSim.setInputVoltage(voltage);  
     }
 
@@ -46,7 +52,7 @@ public class FeederIOSim implements FeederIO {
         
         inputs.feederAmps = feederMotorSim.getCurrentDrawAmps();
         inputs.feederVelocityRotationsPerSec = feederMotorSim.getAngularVelocityRPM() / 60;
-        inputs.feederVoltage = 0;
+        inputs.feederVoltage = currVoltage;
         inputs.feederTempC = 0;
     }
     
