@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.Subsystems.shooter;
+package frc.robot.Subsystems.shooter.pivot;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
@@ -15,11 +15,12 @@ import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants;
+import frc.robot.Subsystems.shooter.ShooterSubsystem;
 
 /** Add your docs here. */
 public class PivotIOReal implements PivotIO {
 
-    private final TalonFX pivotMotor = new TalonFX(Constants.PIVOT_KRAKEN_ID);
+    private final TalonFX pivotMotor = new TalonFX(Constants.PIVOT_TALON_ID);
 
     private final StatusSignal<Double> voltage = pivotMotor.getMotorVoltage();
     private final StatusSignal<Double> currentAmps = pivotMotor.getStatorCurrent();
@@ -37,7 +38,7 @@ public class PivotIOReal implements PivotIO {
         pivotConfig.Feedback.SensorToMechanismRatio = ShooterSubsystem.PIVOT_RATIO;
 
         pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-        pivotConfig.CurrentLimits.StatorCurrentLimit = 40.0;
+        pivotConfig.CurrentLimits.StatorCurrentLimit = 0.0;
 
         // Copied from repo
         pivotConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
@@ -53,7 +54,7 @@ public class PivotIOReal implements PivotIO {
     
         pivotMotor.getConfigurator().apply(pivotConfig);
 
-        BaseStatusSignal.setUpdateFrequencyForAll(250.0, voltage, currentAmps, tempC, rotations);
+        BaseStatusSignal.setUpdateFrequencyForAll(50.0, voltage, currentAmps, tempC, rotations);
         pivotMotor.optimizeBusUtilization();
     }
 

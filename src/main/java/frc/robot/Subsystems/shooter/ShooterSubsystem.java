@@ -14,6 +14,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Subsystems.feeder.RoutingSim;
+import frc.robot.Subsystems.shooter.flywheel.FlywheelIO;
+import frc.robot.Subsystems.shooter.flywheel.FlywheelIOInputsAutoLogged;
+import frc.robot.Subsystems.shooter.pivot.PivotIO;
+import frc.robot.Subsystems.shooter.pivot.PivotIOInputsAutoLogged;
 
 /** Add your docs here. */
 public class ShooterSubsystem extends SubsystemBase {
@@ -87,8 +91,8 @@ public class ShooterSubsystem extends SubsystemBase {
                   right.getAsDouble(), flywheelIOInputsRight.motorVelocityRotationsPerSecond, 1.0));
             
 
-            flywheelIOLeft.setVelocityRotationsPerSecond(leftGoal);
-            flywheelIORight.setVelocityRotationsPerSecond(rightGoal);
+            flywheelIOLeft.setVelocity(leftGoal);
+            flywheelIORight.setVelocity(rightGoal);
             pivotIO.setPivotSetpoint(pivotGoal);
         });
     }
@@ -105,8 +109,8 @@ public class ShooterSubsystem extends SubsystemBase {
         return this.run(() -> {
             leftGoal = left.getAsDouble();
             rightGoal = right.getAsDouble();
-            flywheelIOLeft.setVelocityRotationsPerSecond(left.getAsDouble());
-            flywheelIORight.setVelocityRotationsPerSecond(right.getAsDouble());
+            flywheelIOLeft.setVelocity(left.getAsDouble());
+            flywheelIORight.setVelocity(right.getAsDouble());
         });
     }
 

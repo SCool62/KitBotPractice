@@ -21,7 +21,6 @@ public class BeamBreakIOReal implements BeamBreakIO {
 
     @Override
     public boolean getSecondBeamBreak() {
-        // TODO Auto-generated method stub
         return secondBeamBreak.get();
     }
 

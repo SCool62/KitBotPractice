@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.Subsystems.shooter;
+package frc.robot.Subsystems.shooter.flywheel;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
@@ -11,6 +11,8 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
+
+import frc.robot.Subsystems.shooter.ShooterSubsystem;
 
 
 /** Add your docs here. */
@@ -59,6 +61,9 @@ public class FlywheelIOReal implements FlywheelIO {
         flywheelConfig.Slot0.kD = 0.0;
 
         flywheelMotor.getConfigurator().apply(flywheelConfig);
+
+        BaseStatusSignal.setUpdateFrequencyForAll(50, velocity, voltage, currentAmps, tempC);
+        flywheelMotor.optimizeBusUtilization();
     }
 
     @Override
@@ -78,7 +83,7 @@ public class FlywheelIOReal implements FlywheelIO {
     }
 
     @Override
-    public void setVelocityRotationsPerSecond(double velocityTargetRotationsPerSecond) {
+    public void setVelocity(double velocityTargetRotationsPerSecond) {
         flywheelMotor.setControl(velocityVoltage.withVelocity(velocityTargetRotationsPerSecond));
     }
 

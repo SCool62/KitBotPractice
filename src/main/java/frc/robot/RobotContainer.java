@@ -18,14 +18,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Subsystems.feeder.FeederIOReal;
-import frc.robot.Subsystems.feeder.FeederIOSim;
-import frc.robot.Subsystems.feeder.FeederSubsystem;
 import frc.robot.Subsystems.feeder.RoutingSim;
 import frc.robot.Subsystems.feeder.beambreak.BeamBreakIO;
 import frc.robot.Subsystems.feeder.beambreak.BeamBreakIOReal;
 import frc.robot.Subsystems.feeder.beambreak.BeamBreakIOSim;
+import frc.robot.Subsystems.feeder.feeder.FeederIOReal;
+import frc.robot.Subsystems.feeder.feeder.FeederIOSim;
+import frc.robot.Subsystems.feeder.feeder.FeederSubsystem;
 import frc.robot.Subsystems.shooter.*;
+import frc.robot.Subsystems.shooter.flywheel.FlywheelIOReal;
+import frc.robot.Subsystems.shooter.flywheel.FlywheelIOSim;
+import frc.robot.Subsystems.shooter.pivot.PivotIOReal;
+import frc.robot.Subsystems.shooter.pivot.PivotIOSim;
 
 public class RobotContainer {
 
@@ -48,8 +52,8 @@ public class RobotContainer {
       beamBreakIO = new BeamBreakIOReal();
       shooterSubsystem = new ShooterSubsystem(
         // Make sure these inverts are correct
-        new FlywheelIOReal(Constants.FLYWHEEL_KRAKEN_ID1, InvertedValue.Clockwise_Positive), 
-        new FlywheelIOReal(Constants.FLYWHEEL_KRAKEN_ID2, InvertedValue.CounterClockwise_Positive), 
+        new FlywheelIOReal(Constants.FLYWHEEL_TALON_ID1, InvertedValue.Clockwise_Positive), 
+        new FlywheelIOReal(Constants.FLYWHEEL_TALON_ID2, InvertedValue.CounterClockwise_Positive), 
         new PivotIOReal());
       feederSubsystem = new FeederSubsystem(new FeederIOReal(), beamBreakIO);
     } else {

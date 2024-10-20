@@ -26,7 +26,6 @@ public class BeamBreakIOSim implements BeamBreakIO {
 
     @Override
     public boolean getSecondBeamBreak() {
-        // TODO Auto-generated method stub
         return secondBeamBreak;
     }
 

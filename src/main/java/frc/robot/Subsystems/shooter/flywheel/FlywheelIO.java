@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.Subsystems.shooter;
+package frc.robot.Subsystems.shooter.flywheel;
 
 import org.littletonrobotics.junction.AutoLog;
 
@@ -19,7 +19,7 @@ public interface FlywheelIO {
 
     public abstract void updateInputs(FlywheelIOInputs inputs);
 
-    public abstract void setVelocityRotationsPerSecond(double velocityTargetRotationsPerSecond);
+    public abstract void setVelocity(double velocityTargetRotationsPerSecond);
 
     public abstract void setVoltage(double voltage);
 }
