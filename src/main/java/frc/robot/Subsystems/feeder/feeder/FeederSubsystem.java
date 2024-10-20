@@ -4,7 +4,6 @@
 
 package frc.robot.Subsystems.feeder.feeder;
 
-import java.util.Optional;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -20,7 +19,7 @@ import frc.robot.Subsystems.feeder.feeder.FeederIO.FeederIOInputs;
 public class FeederSubsystem extends SubsystemBase {
     // Values copied from GitHub
     public static final double INDEXING_VOLTAGE = 4.0;
-    public static final double INDEXING_VELOCITY = 20.0;
+    public static final double INDEXING_VELOCITY = 5.0;
 
     private FeederIO feederIO;
     private BeamBreakIO beamBreakIO;

@@ -60,7 +60,7 @@ public class ShooterSubsystem extends SubsystemBase {
         pivotIO.updateInputs(pivotIOInputs);
 
         if ((!RoutingSim.getInstance().getNotePos().isEmpty() && RoutingSim.getInstance().getNotePos().get() >= NOTE_POS_FLYWHEEL_LOWER_LIMIT)) {
-            RoutingSim.getInstance().updateSim(0.02, flywheelIOInputsLeft.motorVelocityRotationsPerSecond);
+            RoutingSim.getInstance().updateSim(0.02, flywheelIOInputsLeft.motorVelocityRotationsPerSecond, 0.100713);
         }
 
         Logger.processInputs("Flywheel1", flywheelIOInputsLeft);

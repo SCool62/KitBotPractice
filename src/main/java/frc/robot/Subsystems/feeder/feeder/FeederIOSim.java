@@ -70,7 +70,7 @@ public class FeederIOSim implements FeederIO {
 
         if (RoutingSim.getInstance().getNotePos().isEmpty() || RoutingSim.getInstance().getNotePos().get() < (0.051 + Units.inchesToMeters(14))
         ) {
-            RoutingSim.getInstance().updateSim(0.02, feederMotorSim.getAngularVelocityRPM() / 60);
+            RoutingSim.getInstance().updateSim(0.02, feederMotorSim.getAngularVelocityRPM() / 60, 0.0508);
         }
         
         inputs.feederAmps = feederTalonFXSim.getSupplyCurrent();

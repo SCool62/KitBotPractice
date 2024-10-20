@@ -88,7 +88,7 @@ public class RobotContainer {
       Commands.runOnce(() -> {
         RoutingSim.getInstance().setNotePos(RoutingSim.getInstance().getNotePos().isEmpty() ? Optional.of(0.450 + Units.inchesToMeters(14)) : RoutingSim.getInstance().getNotePos());
       }),
-      shooterSubsystem.setFlywheelVelocityCommand(() -> -20.0, () -> -20.0).until(() -> feederSubsystem.getBeamBreakIO().getFirstBeamBreak()),
+      shooterSubsystem.setFlywheelVelocityCommand(() -> -1.0, () -> -1.0).until(() -> feederSubsystem.getBeamBreakIO().getFirstBeamBreak()),
       Commands.runOnce(() -> hasPassedBeamBreak = false),
       feederSubsystem.indexCommand()
     ));

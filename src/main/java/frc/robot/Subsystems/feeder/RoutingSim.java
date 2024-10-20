@@ -29,7 +29,7 @@ public class RoutingSim {
     private RoutingSim() {}
 
 
-    public void updateSim(double dtSeconds, double velocityRotationPerSec) {
+    public void updateSim(double dtSeconds, double velocityRotationPerSec, double wheelDiamMeters) {
         
         if (notePos.isEmpty()) {
             Logger.recordOutput("SimNotePos", -1.0);
@@ -44,7 +44,7 @@ public class RoutingSim {
         }
         
         // 1.562 is the diameter of the roller
-        double velocityMetersPerSec = Units.inchesToMeters(velocityRotationPerSec * (Units.inchesToMeters(1.562) * Math.PI));
+        double velocityMetersPerSec = velocityRotationPerSec * (wheelDiamMeters * Math.PI);
 
         notePos = Optional.of(notePos.get() + (velocityMetersPerSec * dtSeconds));
 
