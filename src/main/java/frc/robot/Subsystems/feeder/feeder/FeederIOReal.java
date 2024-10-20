@@ -16,7 +16,7 @@ import frc.robot.Constants;
 
 /** Add your docs here. */
 public class FeederIOReal implements FeederIO {
-    private final TalonFX motor = new TalonFX(Constants.FEEDER_ID);
+    private final TalonFX motor = new TalonFX(Constants.FEEDER_TALON_ID, "canivore");
 
     private final StatusSignal<Double> velocity = motor.getVelocity();
     private final StatusSignal<Double> voltage = motor.getMotorVoltage();

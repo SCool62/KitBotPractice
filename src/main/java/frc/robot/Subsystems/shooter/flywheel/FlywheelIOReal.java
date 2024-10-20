@@ -35,7 +35,7 @@ public class FlywheelIOReal implements FlywheelIO {
     public FlywheelIOReal(int motorID, InvertedValue motorInvertConfig) {
         //this.motorID = motorID;
 
-        flywheelMotor = new TalonFX(motorID);
+        flywheelMotor = new TalonFX(motorID, "canivore");
 
         // Initialize inputs
         velocity = flywheelMotor.getVelocity();

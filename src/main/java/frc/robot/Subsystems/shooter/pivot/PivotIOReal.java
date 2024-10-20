@@ -20,7 +20,7 @@ import frc.robot.Subsystems.shooter.ShooterSubsystem;
 /** Add your docs here. */
 public class PivotIOReal implements PivotIO {
 
-    private final TalonFX pivotMotor = new TalonFX(Constants.PIVOT_TALON_ID);
+    private final TalonFX pivotMotor = new TalonFX(Constants.PIVOT_TALON_ID, "canivore");
 
     private final StatusSignal<Double> voltage = pivotMotor.getMotorVoltage();
     private final StatusSignal<Double> currentAmps = pivotMotor.getStatorCurrent();
