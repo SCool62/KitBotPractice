@@ -4,9 +4,13 @@
 
 package frc.robot.Subsystems.feeder;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.sim.TalonFXSimState;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
@@ -15,34 +19,52 @@ import frc.robot.RobotContainer;
 /** Add your docs here. */
 public class FeederIOSim implements FeederIO {
 
+    TalonFX feederTalonFX = new TalonFX(0);
+
     DCMotorSim feederMotorSim = new DCMotorSim(DCMotor.getKrakenX60Foc(1), 12f / 22f, 0.01);
 
-    private final PIDController feederPid = new PIDController(10, 0.0, 0.0);
-    // kV = krakenKV (0.12) * gear ratio
-    private final SimpleMotorFeedforward feederFF = new SimpleMotorFeedforward(0.0, (0.12) * 12 / 22);
+    TalonFXSimState feederTalonFXSim = feederTalonFX.getSimState();
 
-    private double currVoltage = 0.0;
+    private final VoltageOut voltageOut = new VoltageOut(0.0).withEnableFOC(true);
+    private final VelocityVoltage velocityVoltage = new VelocityVoltage(0.0).withEnableFOC(true);
 
-    public FeederIOSim() {}
+
+    public FeederIOSim() {
+        TalonFXConfiguration toConfigure = new TalonFXConfiguration();
+        CurrentLimitsConfigs currentLimits = new CurrentLimitsConfigs();
+
+        currentLimits.SupplyCurrentLimit = 20
+        ;
+        currentLimits.SupplyCurrentLimitEnable = true; // And enable it
+
+        toConfigure.CurrentLimits = currentLimits;
+        
+        toConfigure.Slot0.kP = 15;
+        // kV = krakenKV (0.12) * gear ratio
+        toConfigure.Slot0.kV = (0.12) * 12 / 22;
+
+        feederTalonFX.getConfigurator().apply(toConfigure);
+
+    }
 
 
 
     @Override
     public void setVelocity(double velocityTarget) {
-        setVoltage(feederPid.calculate(
-            feederMotorSim.getAngularVelocityRPM() / 60, velocityTarget)
-            + feederFF.calculate(velocityTarget));
+        feederTalonFX.setControl(velocityVoltage.withVelocity(velocityTarget));
     }
 
     @Override
     public void setVoltage(double voltage) {
-        voltage = MathUtil.clamp(voltage, -(RobotContainer.getBatteryVoltage()), RobotContainer.getBatteryVoltage());
-        currVoltage = voltage;
-        feederMotorSim.setInputVoltage(voltage);  
+        feederTalonFX.setControl(voltageOut.withOutput(voltage));
     }
 
     @Override
     public void updateInputs(FeederIOInputs inputs) {
+        feederTalonFXSim.setSupplyVoltage(RobotContainer.getBatteryVoltage());
+
+        feederMotorSim.setInput(feederTalonFXSim.getMotorVoltage());
+
         feederMotorSim.update(0.02);
 
         if (RoutingSim.getInstance().getNotePos().isEmpty() || RoutingSim.getInstance().getNotePos().get() < (0.051 + Units.inchesToMeters(14))
@@ -50,9 +72,9 @@ public class FeederIOSim implements FeederIO {
             RoutingSim.getInstance().updateSim(0.02, feederMotorSim.getAngularVelocityRPM() / 60);
         }
         
-        inputs.feederAmps = feederMotorSim.getCurrentDrawAmps();
+        inputs.feederAmps = feederTalonFXSim.getSupplyCurrent();
         inputs.feederVelocityRotationsPerSec = feederMotorSim.getAngularVelocityRPM() / 60;
-        inputs.feederVoltage = currVoltage;
+        inputs.feederVoltage = feederTalonFXSim.getMotorVoltage();
         inputs.feederTempC = 0;
     }
     

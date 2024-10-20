@@ -32,8 +32,8 @@ public class FeederIOReal implements FeederIO {
 
         config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
-        config.CurrentLimits.StatorCurrentLimitEnable = true;
-        config.CurrentLimits.StatorCurrentLimit = 40.0;
+        config.CurrentLimits.SupplyCurrentLimitEnable = true;
+        config.CurrentLimits.SupplyCurrentLimit = 40.0;
 
         // Copied from repo
         config.Slot0.kV = 0.12;

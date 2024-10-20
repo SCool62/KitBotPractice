@@ -44,8 +44,9 @@ public class PivotIOSim implements PivotIO {
 
     @Override
     public void setVoltage(double voltage) {
-        currVoltage = voltage;
-        pivotSim.setInputVoltage(MathUtil.clamp(voltage, -(RobotContainer.getBatteryVoltage()), RobotContainer.getBatteryVoltage()));   
+        //currVoltage = voltage;
+        //pivotSim.setInputVoltage(MathUtil.clamp(voltage, -(RobotContainer.getBatteryVoltage()), RobotContainer.getBatteryVoltage()));
+        pivotSim.setInputVoltage(0);
     }
 
     @Override

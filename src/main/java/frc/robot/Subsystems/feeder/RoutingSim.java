@@ -17,7 +17,7 @@ public class RoutingSim {
     private static double LOWER_LIMIT_BEAMBREAK_ONE = Units.inchesToMeters(8);
     private static double UPPER_LIMIT_BEAMBREAK_ONE = Units.inchesToMeters(22.65);
     private static double LOWER_LIMIT_BEAMBREAK_TWO = Units.inchesToMeters(8.85);
-    private static double UPPER_LIMIT_BEAMBREAK_TWO = Units.inchesToMeters(23.5);
+    private static double UPPER_LIMIT_BEAMBREAK_TWO = Units.inchesToMeters(50);
 
     private Optional<BeamBreakIOSim> beamBreakIO = Optional.empty();
     

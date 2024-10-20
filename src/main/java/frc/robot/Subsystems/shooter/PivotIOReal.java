@@ -66,7 +66,8 @@ public class PivotIOReal implements PivotIO {
 
     @Override
     public void setVoltage(double targetVoltage) {
-        pivotMotor.setControl(voltageOut.withOutput(targetVoltage));
+        //pivotMotor.setControl(voltageOut.withOutput(targetVoltage));
+        pivotMotor.setControl(voltageOut.withOutput(0));
     }
 
     @Override
