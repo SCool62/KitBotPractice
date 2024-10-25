@@ -114,6 +114,13 @@ public class ShooterSubsystem extends SubsystemBase {
         });
     }
 
+    public Command setFlywheelVoltageCommand(double left, double right) {
+        return this.run(() -> {
+            flywheelIOLeft.setVoltage(left);
+            flywheelIORight.setVoltage(right);
+        });
+    }
+
     public double getFlywheelLeftCurrentAmps() {
         return flywheelIOInputsLeft.motorAmps;
     }

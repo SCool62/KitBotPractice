@@ -20,9 +20,9 @@ import frc.robot.Subsystems.shooter.ShooterSubsystem;
 public class FlywheelIOSim implements FlywheelIO {
 
     TalonFX flyweelTalonFX = new TalonFX(0);
-    TalonFXSimState simState = flyweelTalonFX.getSimState();
+    TalonFXSimState talonFxSimState = flyweelTalonFX.getSimState();
 
-    DCMotorSim flywheelSim = new DCMotorSim(DCMotor.getKrakenX60Foc(1), ShooterSubsystem.FLYWHEEL_RATIO, 0.001);
+    DCMotorSim flywheelSim = new DCMotorSim(DCMotor.getKrakenX60Foc(1), ShooterSubsystem.FLYWHEEL_RATIO, 0.01);
 
     private final VoltageOut voltageOut = new VoltageOut(0.0).withEnableFOC(true);
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0.0).withEnableFOC(true);
@@ -31,14 +31,13 @@ public class FlywheelIOSim implements FlywheelIO {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
         CurrentLimitsConfigs currentLimits = new CurrentLimitsConfigs();
 
-        currentLimits.SupplyCurrentLimit = 60;
+        currentLimits.SupplyCurrentLimit = 20;
         currentLimits.SupplyCurrentLimitEnable = true;
 
         configuration.CurrentLimits = currentLimits;
 
-        // Values from Github
-        configuration.Slot0.kP = 0.3;
-        configuration.Slot0.kV = 0.0925;
+        configuration.Slot0.kP = 0.0;
+        configuration.Slot0.kV = 0.0;
 
         flyweelTalonFX.getConfigurator().apply(configuration);
     }
@@ -58,16 +57,16 @@ public class FlywheelIOSim implements FlywheelIO {
 
     @Override
     public void updateInputs(FlywheelIOInputs inputs) {
-        simState.setSupplyVoltage(RobotContainer.getBatteryVoltage());
+        talonFxSimState.setSupplyVoltage(RobotContainer.getBatteryVoltage());
 
-        flywheelSim.setInput(simState.getMotorVoltage());
+        flywheelSim.setInput(talonFxSimState.getMotorVoltage());
 
         flywheelSim.update(0.02);
 
         inputs.motorVelocityRotationsPerSecond = flywheelSim.getAngularVelocityRPM() / 60;
-        inputs.motorAmps = simState.getSupplyCurrent();
+        inputs.motorAmps = talonFxSimState.getSupplyCurrent();
         inputs.motorTempC = 0;
-        inputs.motorVoltage = simState.getMotorVoltage();
+        inputs.motorVoltage = talonFxSimState.getMotorVoltage();
     }
     
 }

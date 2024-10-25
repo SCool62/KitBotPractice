@@ -63,7 +63,7 @@ public class RobotContainer {
       feederSubsystem = new FeederSubsystem(new FeederIOSim(), beamBreakIO);
     }
 
-    feederSubsystem.setDefaultCommand(feederSubsystem.setVoltageCommand(0));
+    feederSubsystem.setDefaultCommand(feederSubsystem.setVelocityCommand(0));
     shooterSubsystem.setDefaultCommand(shooterSubsystem.runShooterCommand(new Rotation2d(0), () -> 0, () -> 0));
     configureBindings();
 
@@ -84,14 +84,15 @@ public class RobotContainer {
 
     controller.b().whileTrue(shooterSubsystem.setPivotAngleCommand(new Rotation2d(50)));
     controller.y().onTrue(feederSubsystem.indexCommand());
-    controller.a().onTrue(Commands.sequence(
-      Commands.runOnce(() -> {
-        RoutingSim.getInstance().setNotePos(RoutingSim.getInstance().getNotePos().isEmpty() ? Optional.of(0.450 + Units.inchesToMeters(14)) : RoutingSim.getInstance().getNotePos());
-      }),
-      shooterSubsystem.setFlywheelVelocityCommand(() -> -1.0, () -> -1.0).until(() -> feederSubsystem.getBeamBreakIO().getFirstBeamBreak()),
-      Commands.runOnce(() -> hasPassedBeamBreak = false),
-      feederSubsystem.indexCommand()
-    ));
+//    controller.a().onTrue(Commands.sequence(
+//      Commands.runOnce(() -> {
+//        RoutingSim.getInstance().setNotePos(RoutingSim.getInstance().getNotePos().isEmpty() ? Optional.of(0.450 + Units.inchesToMeters(14)) : RoutingSim.getInstance().getNotePos());
+//      }),
+//      shooterSubsystem.setFlywheelVelocityCommand(() -> -1.0, () -> -1.0).until(() -> feederSubsystem.getBeamBreakIO().getFirstBeamBreak()),
+//      Commands.runOnce(() -> hasPassedBeamBreak = false),
+//      feederSubsystem.indexCommandWithVelocity(0.5)
+//    ));
+    controller.a().whileTrue(shooterSubsystem.setFlywheelVoltageCommand(6, 6));
   }
 
   public Command getAutonomousCommand() {
