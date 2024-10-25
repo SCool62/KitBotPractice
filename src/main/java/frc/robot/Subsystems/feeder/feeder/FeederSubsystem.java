@@ -17,7 +17,6 @@ import frc.robot.Subsystems.feeder.feeder.FeederIO.FeederIOInputs;
 
 /** Add your docs here. */
 public class FeederSubsystem extends SubsystemBase {
-    // Values copied from GitHub
     public static final double INDEXING_VOLTAGE = 4.0;
     public static final double INDEXING_VELOCITY = 5.0;
 
@@ -74,6 +73,24 @@ public class FeederSubsystem extends SubsystemBase {
                 feederIO.setVelocity(0);
             } else {
                 feederIO.setVelocity(INDEXING_VELOCITY);
+            }
+        });
+    }
+
+    public Command indexCommandWithVelocity(double indexingVelocity) {
+        return this.run(() -> {
+            if (Robot.isSimulation() && RoutingSim.getInstance().getNotePos().isEmpty()) {
+                System.out.println("No note loaded");
+                return;
+            }
+
+            if (beamBreakIOInputs.secondBeamBreak) {
+                // Move ring backward
+                feederIO.setVelocity(-indexingVelocity / 4);
+            } else if (beamBreakIOInputs.firstBeamBreak) {
+                feederIO.setVelocity(0);
+            } else {
+                feederIO.setVelocity(indexingVelocity);
             }
         });
     }

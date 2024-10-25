@@ -40,14 +40,12 @@ public class FeederIOSim implements FeederIO {
 
         toConfigure.CurrentLimits = currentLimits;
         
-        toConfigure.Slot0.kP = 15;
-        // kV = krakenKV (0.12) * gear ratio
-        toConfigure.Slot0.kV = (0.12) * 12 / 22;
+        toConfigure.Slot0.kP = 0.1;
+        toConfigure.Slot0.kV = 0.055;
 
         feederTalonFX.getConfigurator().apply(toConfigure);
 
     }
-
 
 
     @Override
