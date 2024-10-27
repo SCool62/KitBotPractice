@@ -19,15 +19,18 @@ import frc.robot.Subsystems.shooter.ShooterSubsystem;
 /** Add your docs here. */
 public class FlywheelIOSim implements FlywheelIO {
 
-    TalonFX flyweelTalonFX = new TalonFX(0);
-    TalonFXSimState talonFxSimState = flyweelTalonFX.getSimState();
+    TalonFX flyweelTalonFX;
+    TalonFXSimState talonFxSimState;
 
     DCMotorSim flywheelSim = new DCMotorSim(DCMotor.getKrakenX60Foc(1), ShooterSubsystem.FLYWHEEL_RATIO, 0.01);
 
     private final VoltageOut voltageOut = new VoltageOut(0.0).withEnableFOC(true);
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0.0).withEnableFOC(true);
 
-    public FlywheelIOSim() {
+    public FlywheelIOSim(int deviceId) {
+        flyweelTalonFX = new TalonFX(deviceId);
+        talonFxSimState = flyweelTalonFX.getSimState();
+
         TalonFXConfiguration configuration = new TalonFXConfiguration();
         CurrentLimitsConfigs currentLimits = new CurrentLimitsConfigs();
 
@@ -37,7 +40,7 @@ public class FlywheelIOSim implements FlywheelIO {
         configuration.CurrentLimits = currentLimits;
 
         configuration.Slot0.kP = 0.0;
-        configuration.Slot0.kV = 0.0;
+        configuration.Slot0.kV = 10;
 
         flyweelTalonFX.getConfigurator().apply(configuration);
     }
@@ -45,13 +48,11 @@ public class FlywheelIOSim implements FlywheelIO {
 
     @Override
     public void setVelocity(double velocityTargetRotationsPerSecond) {
-        System.out.println("Setting Flywheel Velocity.");
         flyweelTalonFX.setControl(velocityVoltage.withVelocity(velocityTargetRotationsPerSecond));
     }
 
     @Override
     public void setVoltage(double voltage) {
-        System.out.println("Setting Flywheel Voltage");
         flyweelTalonFX.setControl(voltageOut.withOutput(voltage));
     }
 

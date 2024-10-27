@@ -59,7 +59,7 @@ public class RobotContainer {
     } else {
       BeamBreakIOSim beamBreakIO = new BeamBreakIOSim();
       RoutingSim.getInstance().setBeamBreakIOSim(beamBreakIO);
-      shooterSubsystem = new ShooterSubsystem(new FlywheelIOSim(), new FlywheelIOSim(), new PivotIOSim());
+      shooterSubsystem = new ShooterSubsystem(new FlywheelIOSim(1), new FlywheelIOSim(2), new PivotIOSim());
       feederSubsystem = new FeederSubsystem(new FeederIOSim(), beamBreakIO);
     }
 
@@ -92,7 +92,8 @@ public class RobotContainer {
 //      Commands.runOnce(() -> hasPassedBeamBreak = false),
 //      feederSubsystem.indexCommandWithVelocity(0.5)
 //    ));
-    controller.a().whileTrue(shooterSubsystem.setFlywheelVoltageCommand(6, 6));
+    //controller.a().whileTrue(shooterSubsystem.setFlywheelVoltageCommand(30, 30));
+    controller.a().whileTrue(shooterSubsystem.setFlywheelVelocityCommand(() -> 10, () -> 10));
   }
 
   public Command getAutonomousCommand() {
