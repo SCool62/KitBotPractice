@@ -40,7 +40,7 @@ public class FlywheelIOSim implements FlywheelIO {
         configuration.CurrentLimits = currentLimits;
 
         configuration.Slot0.kP = 0.0;
-        configuration.Slot0.kV = 10;
+        configuration.Slot0.kV = 0.094;
 
         flyweelTalonFX.getConfigurator().apply(configuration);
     }
