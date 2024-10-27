@@ -39,9 +39,9 @@ public class FeederIOSim implements FeederIO {
         currentLimits.SupplyCurrentLimitEnable = true; // And enable it
 
         toConfigure.CurrentLimits = currentLimits;
-        
+        // Original: kp = 0.1, kV = 0.055
         toConfigure.Slot0.kP = 0.1;
-        toConfigure.Slot0.kV = 0.055;
+        toConfigure.Slot0.kV = 0.068;
 
         feederTalonFX.getConfigurator().apply(toConfigure);
 

@@ -18,7 +18,7 @@ import frc.robot.Subsystems.feeder.feeder.FeederIO.FeederIOInputs;
 /** Add your docs here. */
 public class FeederSubsystem extends SubsystemBase {
     public static final double INDEXING_VOLTAGE = 4.0;
-    public static final double INDEXING_VELOCITY = 5.0;
+    public static final double INDEXING_VELOCITY = 40.0;
 
     private FeederIO feederIO;
     private BeamBreakIO beamBreakIO;
@@ -68,10 +68,13 @@ public class FeederSubsystem extends SubsystemBase {
 
             if (beamBreakIOInputs.secondBeamBreak) {
                 // Move ring backward
+                velocityTarget = -INDEXING_VELOCITY / 4;
                 feederIO.setVelocity(-INDEXING_VELOCITY / 4);
             } else if (beamBreakIOInputs.firstBeamBreak) {
+                velocityTarget = 0;
                 feederIO.setVelocity(0);
             } else {
+                velocityTarget = INDEXING_VELOCITY;
                 feederIO.setVelocity(INDEXING_VELOCITY);
             }
         });
