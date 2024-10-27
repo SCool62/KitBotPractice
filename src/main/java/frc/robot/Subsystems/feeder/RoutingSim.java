@@ -23,14 +23,23 @@ public class RoutingSim {
     
 
     private Optional<Double> notePos = Optional.empty();
+    private boolean isDisabled = false;
 
     private final static RoutingSim instance = new RoutingSim();
 
     private RoutingSim() {}
 
+    public void disable() {
+        notePos = Optional.of(1.0);
+        isDisabled = true;
+    }
+
 
     public void updateSim(double dtSeconds, double velocityRotationPerSec, double wheelDiamMeters) {
-        
+        if (isDisabled) {
+            return;
+        }
+
         if (notePos.isEmpty()) {
             Logger.recordOutput("SimNotePos", -1.0);
             beamBreakIO.get().setFirstBeamBreakState(false);

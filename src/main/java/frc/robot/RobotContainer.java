@@ -56,6 +56,7 @@ public class RobotContainer {
         new FlywheelIOReal(Constants.FLYWHEEL_TALON_ID2, InvertedValue.CounterClockwise_Positive), 
         new PivotIOReal());
       feederSubsystem = new FeederSubsystem(new FeederIOReal(), beamBreakIO);
+      RoutingSim.getInstance().disable();
     } else {
       BeamBreakIOSim beamBreakIO = new BeamBreakIOSim();
       RoutingSim.getInstance().setBeamBreakIOSim(beamBreakIO);
@@ -74,25 +75,30 @@ public class RobotContainer {
     controller.x().onTrue(Commands.deadline(
             shooterSubsystem.runShooterCommand(new Rotation2d(30.0), () -> 80, () -> 80),
       // Hopefully runs flywheels for 1 sec, then turns them off
-      feederSubsystem.setVelocityCommand(50)
-        .raceWith(Commands.waitUntil(() -> (!(feederSubsystem.getBeamBreakIO().getSecondBeamBreak()) && !(feederSubsystem.getBeamBreakIO().getFirstBeamBreak()) && hasPassedBeamBreak)
-        )).andThen(() -> hasPassedBeamBreak = false)
+            Commands.sequence(
+                    Commands.waitSeconds(1),
+                    feederSubsystem.setVelocityCommand(50)
+                            .raceWith(Commands.waitUntil(() -> (!(feederSubsystem.getBeamBreakIO().getSecondBeamBreak()) && !(feederSubsystem.getBeamBreakIO().getFirstBeamBreak()) && hasPassedBeamBreak)
+                            )).andThen(() -> hasPassedBeamBreak = false)
+            )
+
     )
     .andThen(Commands.deadline(
             shooterSubsystem.setFlywheelVelocityCommand(() -> 0.0, () -> 0.0),
             feederSubsystem.setVelocityCommand(0)
     )));
 
-    controller.b().whileTrue(shooterSubsystem.setPivotAngleCommand(new Rotation2d(50)));
+    controller.b().whileTrue(shooterSubsystem.setFlywheelVelocityCommand(() -> 0, () -> 0));
     controller.y().onTrue(feederSubsystem.indexCommand());
     controller.a().onTrue(Commands.sequence(
       Commands.runOnce(() -> {
         RoutingSim.getInstance().setNotePos(RoutingSim.getInstance().getNotePos().isEmpty() ? Optional.of(0.450 + Units.inchesToMeters(14)) : RoutingSim.getInstance().getNotePos());
       }),
-      shooterSubsystem.setFlywheelVelocityCommand(() -> -1.0, () -> -1.0).until(() -> feederSubsystem.getBeamBreakIO().getFirstBeamBreak()),
+      shooterSubsystem.setFlywheelVelocityCommand(() -> -5.0, () -> -5.0).until(() -> feederSubsystem.getBeamBreakIO().getFirstBeamBreak()),
       Commands.runOnce(() -> hasPassedBeamBreak = false),
-      feederSubsystem.indexCommandWithVelocity(0.5)
+      feederSubsystem.indexCommandWithVelocity(30.0)
     ));
+    //controller.a().whileTrue(feederSubsystem.setVelocityCommand(5.0));
     //controller.a().whileTrue(shooterSubsystem.setFlywheelVelocityCommand(() -> 10, () -> 20));
   }
 

@@ -89,7 +89,7 @@ public class FeederSubsystem extends SubsystemBase {
 
             if (beamBreakIOInputs.secondBeamBreak) {
                 // Move ring backward
-                feederIO.setVelocity(-indexingVelocity / 4);
+                feederIO.setVelocity(-indexingVelocity / 2);
             } else if (beamBreakIOInputs.firstBeamBreak) {
                 feederIO.setVelocity(0);
             } else {
