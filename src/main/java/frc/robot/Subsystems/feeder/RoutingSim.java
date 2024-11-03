@@ -14,32 +14,23 @@ import frc.robot.Subsystems.feeder.beambreak.BeamBreakIOSim;
 /** Add your docs here. */
 public class RoutingSim {
 
-    private static double LOWER_LIMIT_BEAMBREAK_ONE = Units.inchesToMeters(8);
-    private static double UPPER_LIMIT_BEAMBREAK_ONE = Units.inchesToMeters(22.65);
-    private static double LOWER_LIMIT_BEAMBREAK_TWO = Units.inchesToMeters(8.85);
-    private static double UPPER_LIMIT_BEAMBREAK_TWO = Units.inchesToMeters(50);
+    private static final double LOWER_LIMIT_BEAMBREAK_ONE = Units.inchesToMeters(8);
+    private static final double UPPER_LIMIT_BEAMBREAK_ONE = Units.inchesToMeters(22.65);
+    private static final double LOWER_LIMIT_BEAMBREAK_TWO = Units.inchesToMeters(8.85);
+    private static final double UPPER_LIMIT_BEAMBREAK_TWO = Units.inchesToMeters(50);
 
     private Optional<BeamBreakIOSim> beamBreakIO = Optional.empty();
     
 
     private Optional<Double> notePos = Optional.empty();
-    private boolean isDisabled = false;
 
     private final static RoutingSim instance = new RoutingSim();
 
     private RoutingSim() {}
 
-    public void disable() {
-        notePos = Optional.of(1.0);
-        isDisabled = true;
-    }
 
 
     public void updateSim(double dtSeconds, double velocityRotationPerSec, double wheelDiamMeters) {
-        if (isDisabled) {
-            return;
-        }
-
         if (notePos.isEmpty()) {
             Logger.recordOutput("SimNotePos", -1.0);
             beamBreakIO.get().setFirstBeamBreakState(false);

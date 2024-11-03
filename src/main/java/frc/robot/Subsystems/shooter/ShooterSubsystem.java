@@ -7,6 +7,7 @@ package frc.robot.Subsystems.shooter;
 import java.util.function.DoubleSupplier;
 
 
+import frc.robot.Subsystems.shooter.flywheel.FlywheelIOSim;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
@@ -24,9 +25,6 @@ public class ShooterSubsystem extends SubsystemBase {
     // Copied from repo
     public static final double FLYWHEEL_RATIO = 18.0 / 24.0;
     public static final double PIVOT_RATIO = (27.0 / 1.0) * (48.0 / 22.0);
-
-    private static final double NOTE_POS_FLYWHEEL_LOWER_LIMIT = 0.204;
-
     // IO Interfaces
     private final FlywheelIO flywheelIOLeft;
     private final FlywheelIO flywheelIORight;
@@ -47,7 +45,10 @@ public class ShooterSubsystem extends SubsystemBase {
         this.flywheelIOLeft = flywheelIOLeft;
         this.flywheelIORight = flywheelIORight;
         this.pivotIO = pivotIO;
-
+        // Set the sim which updates the routing if the robot is in sim state
+        if (flywheelIOLeft instanceof FlywheelIOSim) {
+            ((FlywheelIOSim) flywheelIOLeft).setUpdatesRoutingSim(true);
+        }
     }
 
     
@@ -58,10 +59,6 @@ public class ShooterSubsystem extends SubsystemBase {
         flywheelIOLeft.updateInputs(flywheelIOInputsLeft);
         flywheelIORight.updateInputs(flywheelIOInputsRight);
         pivotIO.updateInputs(pivotIOInputs);
-
-        if ((!RoutingSim.getInstance().getNotePos().isEmpty() && RoutingSim.getInstance().getNotePos().get() >= NOTE_POS_FLYWHEEL_LOWER_LIMIT)) {
-            RoutingSim.getInstance().updateSim(0.02, flywheelIOInputsLeft.motorVelocityRotationsPerSecond, 0.100713);
-        }
 
         Logger.processInputs("Flywheel1", flywheelIOInputsLeft);
         Logger.processInputs("Flywheel2", flywheelIOInputsRight);

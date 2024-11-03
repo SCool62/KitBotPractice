@@ -34,8 +34,7 @@ public class FeederIOSim implements FeederIO {
         TalonFXConfiguration toConfigure = new TalonFXConfiguration();
         CurrentLimitsConfigs currentLimits = new CurrentLimitsConfigs();
 
-        currentLimits.SupplyCurrentLimit = 20
-        ;
+        currentLimits.SupplyCurrentLimit = 20;
         currentLimits.SupplyCurrentLimitEnable = true; // And enable it
 
         toConfigure.CurrentLimits = currentLimits;

@@ -56,7 +56,6 @@ public class RobotContainer {
         new FlywheelIOReal(Constants.FLYWHEEL_TALON_ID2, InvertedValue.CounterClockwise_Positive), 
         new PivotIOReal());
       feederSubsystem = new FeederSubsystem(new FeederIOReal(), beamBreakIO);
-      RoutingSim.getInstance().disable();
     } else {
       BeamBreakIOSim beamBreakIO = new BeamBreakIOSim();
       RoutingSim.getInstance().setBeamBreakIOSim(beamBreakIO);
