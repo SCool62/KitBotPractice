@@ -38,7 +38,10 @@ public class PivotIOReal implements PivotIO {
         pivotConfig.Feedback.SensorToMechanismRatio = ShooterSubsystem.PIVOT_RATIO;
 
         pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-        pivotConfig.CurrentLimits.StatorCurrentLimit = 0.0;
+        // TODO: Verify & Enable Pivot
+        pivotConfig.CurrentLimits.StatorCurrentLimit = 15;
+        pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        pivotConfig.CurrentLimits.SupplyCurrentLimit = 30;
 
         // Copied from repo
         pivotConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
