@@ -29,9 +29,8 @@ public class PivotIOSim implements PivotIO {
      true, 
      0);
 
-     // Values from github
-     ProfiledPIDController pidController = new ProfiledPIDController(1.0, 0.0, 1.0, new Constraints(10.0, 10.0));
-    ArmFeedforward pivotFF = new ArmFeedforward(0.0, 0.12, 0.8);
+    ProfiledPIDController pidController = new ProfiledPIDController(5, 0.0, 0.0, new Constraints(10.0, 10.0));
+    ArmFeedforward pivotFF = new ArmFeedforward(0.0, 0.07368, 0.0);
 
     private double currVoltage;
 
@@ -45,16 +44,15 @@ public class PivotIOSim implements PivotIO {
 
     @Override
     public void setVoltage(double voltage) {
-        //currVoltage = voltage;
-        //pivotSim.setInputVoltage(MathUtil.clamp(voltage, -(RobotContainer.getBatteryVoltage()), RobotContainer.getBatteryVoltage()));
-        pivotSim.setInputVoltage(0);
+        currVoltage = voltage;
+        pivotSim.setInputVoltage(MathUtil.clamp(voltage, -(RobotContainer.getBatteryVoltage()), RobotContainer.getBatteryVoltage()));
     }
 
     @Override
     public void updateInputs(PivotIOInputs inputs) {
         pivotSim.update(0.02);
 
-        inputs.pivotAngle = Rotation2d.fromRadians(pivotSim.getAngleRads());
+        inputs.pivotAngle = Rotation2d.fromRadians(pivotSim.getAngleRads());                                                                                                            ;
         inputs.pivotMotorAmps = pivotSim.getCurrentDrawAmps();
         inputs.pivotMotorVoltage = currVoltage;
         inputs.pivotMotorTempC = 0;

@@ -72,8 +72,8 @@ public class RobotContainer {
   private void configureBindings() {
     new Trigger(() -> feederSubsystem.getBeamBreakIO().getSecondBeamBreak()).onTrue(Commands.runOnce(() -> {hasPassedBeamBreak = true;}));
     controller.x().onTrue(Commands.deadline(
-            shooterSubsystem.runShooterCommand(new Rotation2d(30.0), () -> 80, () -> 80),
-      // Hopefully runs flywheels for 1 sec, then turns them off
+            shooterSubsystem.runShooterCommand(Rotation2d.fromDegrees(30), () -> 80, () -> 80),
+      // Spins up flywheels for 1 sec then shoots note
             Commands.sequence(
                     Commands.waitSeconds(1),
                     feederSubsystem.setVelocityCommand(50)
@@ -86,15 +86,17 @@ public class RobotContainer {
             shooterSubsystem.setFlywheelVelocityCommand(() -> 0.0, () -> 0.0),
             feederSubsystem.setVelocityCommand(0)
     )));
-
-    controller.b().whileTrue(shooterSubsystem.setFlywheelVelocityCommand(() -> 0, () -> 0));
+    controller.b().whileTrue(shooterSubsystem.setPivotAngleCommand(new Rotation2d(0.4)));
+    //controller.b().whileTrue(shooterSubsystem.setFlywheelVelocityCommand(() -> 0, () -> 0));
     controller.y().onTrue(feederSubsystem.indexCommand());
     controller.a().onTrue(Commands.sequence(
       Commands.runOnce(() -> {
-        RoutingSim.getInstance().setNotePos(RoutingSim.getInstance().getNotePos().isEmpty() ? Optional.of(0.450 + Units.inchesToMeters(14)) : RoutingSim.getInstance().getNotePos());
+        if (Robot.isSimulation())
+          RoutingSim.getInstance().setNotePos(RoutingSim.getInstance().getNotePos().isEmpty() ? Optional.of(0.450 + Units.inchesToMeters(14)) : RoutingSim.getInstance().getNotePos());
       }),
       shooterSubsystem.setFlywheelVelocityCommand(() -> -5.0, () -> -5.0).until(() -> feederSubsystem.getBeamBreakIO().getFirstBeamBreak()),
       Commands.runOnce(() -> hasPassedBeamBreak = false),
+      shooterSubsystem.setFlywheelVelocityCommand(() -> 0, () -> 0),
       feederSubsystem.indexCommandWithVelocity(30.0)
     ));
     //controller.a().whileTrue(feederSubsystem.setVelocityCommand(5.0));
