@@ -53,7 +53,6 @@ public class FlywheelIOReal implements FlywheelIO {
         flywheelConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         flywheelConfig.CurrentLimits.SupplyCurrentLimit = 30.0;
 
-        // Copied from repo
         flywheelConfig.Slot0.kA = 0.0051316;
         flywheelConfig.Slot0.kV = 0.095;
         flywheelConfig.Slot0.kS = 0.3;
