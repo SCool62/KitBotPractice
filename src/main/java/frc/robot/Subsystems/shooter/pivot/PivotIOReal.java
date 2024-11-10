@@ -41,7 +41,7 @@ public class PivotIOReal implements PivotIO {
         // TODO: Verify & Enable Pivot
         pivotConfig.CurrentLimits.StatorCurrentLimit = 15;
         pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        pivotConfig.CurrentLimits.SupplyCurrentLimit = 30;
+        pivotConfig.CurrentLimits.SupplyCurrentLimit = 0;
 
         // Copied from repo
         pivotConfig.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
