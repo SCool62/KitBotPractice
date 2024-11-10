@@ -88,17 +88,19 @@ public class RobotContainer {
     )));
     controller.b().whileTrue(shooterSubsystem.setPivotAngleCommand(new Rotation2d(0.4)));
     //controller.b().whileTrue(shooterSubsystem.setFlywheelVelocityCommand(() -> 0, () -> 0));
-    controller.y().onTrue(feederSubsystem.indexCommand());
+    //controller.y().onTrue(feederSubsystem.indexCommand());
+    controller.y().onTrue(shooterSubsystem.setFlywheelVelocityCommand(() -> 0, () -> 0).alongWith(Commands.runOnce(() -> hasPassedBeamBreak = false)));
     controller.a().onTrue(Commands.sequence(
       Commands.runOnce(() -> {
         if (Robot.isSimulation())
           RoutingSim.getInstance().setNotePos(RoutingSim.getInstance().getNotePos().isEmpty() ? Optional.of(0.450 + Units.inchesToMeters(14)) : RoutingSim.getInstance().getNotePos());
       }),
-      shooterSubsystem.setFlywheelVelocityCommand(() -> -5.0, () -> -5.0).until(() -> feederSubsystem.getBeamBreakIO().getFirstBeamBreak()),
-      Commands.runOnce(() -> hasPassedBeamBreak = false),
-      shooterSubsystem.setFlywheelVelocityCommand(() -> 0, () -> 0),
-      feederSubsystem.indexCommandWithVelocity(30.0)
-    ));
+      Commands.parallel(
+         shooterSubsystem.setFlywheelVelocityCommand(() -> -5.0, () -> -5.0).until(() -> feederSubsystem.getBeamBreakIO().getFirstBeamBreak() && !feederSubsystem.getBeamBreakIO().getSecondBeamBreak()).andThen(shooterSubsystem.setFlywheelVelocityCommand(() -> 0, () -> 0)),
+         feederSubsystem.indexCommandWithVelocity(30.0))
+      )
+
+    );
     //controller.a().whileTrue(feederSubsystem.setVelocityCommand(5.0));
     //controller.a().whileTrue(shooterSubsystem.setFlywheelVelocityCommand(() -> 10, () -> 20));
   }
